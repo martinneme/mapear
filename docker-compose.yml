@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:7
+    container_name: mapear-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: mapear
+    volumes:
+      - mongo_data:/data/db
+volumes:
+  mongo_data:
