@@ -1,34 +1,37 @@
-"use client";
 import Link from "next/link";
-import { clearToken } from "../lib/api";
-import { getUser } from "../lib/session";
+import { Card, Page, PageHeader, SectionTitle } from "./_components/Page";
 
-export default function Home() {
-  const user = getUser();
-
+function HomeCard({ title, desc, href }: { title: string; desc: string; href: string }) {
   return (
-    <div style={{ maxWidth: 760 }}>
-      <h1>Inicio</h1>
-      {!user ? (
-        <div style={{ display: "flex", gap: 12 }}>
-          <Link href="/login">Login</Link>
-          <Link href="/register">Register</Link>
-        </div>
-      ) : (
-        <>
-          <p>Logueado como <b>{user.email}</b> ({user.globalRole})</p>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Link href="/dashboard">Ir al dashboard</Link>
-            <Link href="/map"><button>Ir al Mapa</button></Link>
-            <button onClick={() => { clearToken(); location.href="/"; }}>Logout</button>
-          </div>
-        </>
-      )}
+    <Link
+      href={href}
+      className="block rounded-2xl border border-slate-800 bg-slate-950/40 p-5 hover:bg-slate-900/40"
+    >
+      <div className="text-lg font-semibold">{title}</div>
+      <div className="mt-1 text-sm text-slate-400">{desc}</div>
+      <div className="mt-4 text-sm text-slate-200">Abrir →</div>
+    </Link>
+  );
+}
 
-      <hr />
-      <p>
-        Este MVP implementa: login, tenants (analista) y administración de subscriptores (approve/revoke + flags).
-      </p>
-    </div>
+export default function HomePage() {
+  return (
+    <Page>
+      <PageHeader title="Home" subtitle="Centro de navegación del producto." />
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <HomeCard title="Mapa" desc="Mapa" href="/map" />
+        <HomeCard title="Analistas" desc="Analistas" href="/analysts" />
+        <HomeCard title="Cuenta" desc="Plan / accesos / sesión." href="/account" />
+      </div>
+
+      <Card>
+        <SectionTitle>Próximo</SectionTitle>
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-400">
+          <li>Países clickeables (ISO3) + panel de detalle</li>
+          <li>Contenido por analista, por capa, con paywall (Invited / Subscriber / Plus)</li>
+        </ul>
+      </Card>
+    </Page>
   );
 }

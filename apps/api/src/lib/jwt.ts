@@ -4,6 +4,7 @@ import { env } from "./env.js";
 export type JwtPayload = {
   sub: string;
   role: "ANALYST" | "SUBSCRIBER";
+  planTier: "INVITED" | "SUBSCRIBER" | "SUBSCRIBER_PLUS";
 };
 
 export function signAccessToken(payload: JwtPayload) {

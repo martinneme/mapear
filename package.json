@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "npm run dev -w @mapear/api & npm run dev -w @mapear/web",
-    "dev:api": "npm run dev -w @mapear/api",
+    "dev:api": "",
     "dev:web": "npm run dev -w @mapear/web",
     "build": "npm run build -ws",
     "lint": "npm run lint -ws"

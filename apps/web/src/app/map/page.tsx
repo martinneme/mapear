@@ -100,7 +100,6 @@ export default function MapPage() {
         setDrawer({
           title: p.title || "Evento",
           country: p.country,
-          coords: Array.isArray(c) ? `${c[1].toFixed(2)}, ${c[0].toFixed(2)}` : undefined,
         });
       });
 

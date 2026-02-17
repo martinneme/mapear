@@ -5,6 +5,8 @@ import { env } from "./lib/env.js";
 import { connectDb } from "./db/connect.js";
 import { authRouter } from "./routes/auth.js";
 import { tenantsRouter } from "./routes/tenants.js";
+import { layersRouter } from "./routes/layers.js";
+import { contentRouter } from "./routes/content.js";
 
 async function main() {
   await connectDb();
@@ -22,6 +24,8 @@ async function main() {
 
   app.use("/auth", authRouter);
   app.use("/tenants", tenantsRouter);
+  app.use("/layers", layersRouter);
+  app.use("/content", contentRouter);
 
   app.listen(env.port, () => {
     // eslint-disable-next-line no-console

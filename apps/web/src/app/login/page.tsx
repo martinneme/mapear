@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { api } from "../../lib/api";
+import { Button } from "../_components/Page";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -27,6 +28,7 @@ export default function LoginPage() {
           Entrar
         </button>
         {msg && <pre style={{ whiteSpace: "pre-wrap", color: "crimson" }}>{msg}</pre>}
+        <Button href="/register">Registrate</Button>
       </div>
     </div>
   );

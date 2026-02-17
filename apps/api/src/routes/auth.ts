@@ -17,6 +17,8 @@ authRouter.post("/register", async (req, res) => {
   if (exists) return res.status(409).json({ error: "Email already registered" });
 
   const passwordHash = await bcrypt.hash(password, 10);
+
+  // OJO: planTier default es INVITED (en el schema)
   const user = await UserModel.create({ email, passwordHash, globalRole });
 
   // if analyst: create tenant automatically
@@ -30,7 +32,12 @@ authRouter.post("/register", async (req, res) => {
   }
 
   return res.json({
-    user: { id: String(user._id), email: user.email, globalRole: user.globalRole },
+    user: {
+      id: String(user._id),
+      email: user.email,
+      globalRole: user.globalRole,
+      planTier: user.planTier,
+    },
     tenant: tenant ? { id: String(tenant._id), name: tenant.name } : null,
   });
 });
@@ -40,19 +47,34 @@ authRouter.post("/login", async (req, res) => {
   if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
 
   const { email, password } = parsed.data;
+
   const user = await UserModel.findOne({ email });
   if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
   const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) return res.status(401).json({ error: "Invalid credentials" });
 
-  const accessToken = signAccessToken({ sub: String(user._id), role: user.globalRole });
-  const refreshToken = signRefreshToken({ sub: String(user._id), role: user.globalRole });
+  const accessToken = signAccessToken({
+    sub: String(user._id),
+    role: user.globalRole,
+    planTier: user.planTier,
+  });
+
+  const refreshToken = signRefreshToken({
+    sub: String(user._id),
+    role: user.globalRole,
+    planTier: user.planTier,
+  });
 
   return res.json({
     accessToken,
     refreshToken,
-    user: { id: String(user._id), email: user.email, globalRole: user.globalRole },
+    user: {
+      id: String(user._id),
+      email: user.email,
+      globalRole: user.globalRole,
+      planTier: user.planTier,
+    },
   });
 });
 
@@ -62,7 +84,17 @@ authRouter.post("/refresh", async (req, res) => {
 
   try {
     const payload = verifyRefreshToken(refreshToken);
-    const accessToken = signAccessToken({ sub: payload.sub, role: payload.role });
+
+    // Recomendado: refrescar planTier desde DB por si cambió el plan
+    const user = await UserModel.findById(payload.sub).lean();
+    if (!user) return res.status(401).json({ error: "Invalid refresh token" });
+
+    const accessToken = signAccessToken({
+      sub: String(user._id),
+      role: user.globalRole,
+      planTier: user.planTier,
+    });
+
     return res.json({ accessToken });
   } catch {
     return res.status(401).json({ error: "Invalid refresh token" });

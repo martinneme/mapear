@@ -1,19 +1,19 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import React from "react";
+import AppHeader from "./_components/AppHeader";
+import Breadcrumbs from "./_components/Breadcrumbs";
 
 export default function RouteShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isMap = pathname?.startsWith("/map");
-
-  if (isMap) {
-    return (
-      <main style={{ height: "calc(100vh - 80px)", padding: 8 }}>
+  return (
+    <div className="min-h-dvh">
+      <AppHeader />
+      <main className="mx-auto max-w-7xl px-6 py-6">
+        <div className="mb-4">
+          <Breadcrumbs />
+        </div>
         {children}
       </main>
-    );
-  }
-  
-
-  return <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>;
+    </div>
+  );
 }

@@ -1,4 +1,11 @@
-export type SessionUser = { id: string; email: string; globalRole: "ANALYST" | "SUBSCRIBER" };
+export type PlanTier = "INVITED" | "SUBSCRIBER" | "SUBSCRIBER_PLUS";
+
+export type SessionUser = {
+  id: string;
+  email: string;
+  globalRole: "ANALYST" | "SUBSCRIBER";
+  planTier?: PlanTier;
+};
 
 export function readUserFromStorage(): SessionUser | null {
   try {

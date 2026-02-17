@@ -1,88 +1,180 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root { color-scheme: dark; }
+/* =========================
+   Base theme / reset
+========================= */
+:root {
+  color-scheme: dark;
+}
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  background: #020617; /* slate-950 */
-  color: #f1f5f9;      /* slate-100 */
+  /* Premium dark background with subtle glows */
+  background:
+    radial-gradient(900px circle at 20% -10%, rgba(34, 211, 238, 0.12), transparent 55%),
+    radial-gradient(700px circle at 80% 0%, rgba(59, 130, 246, 0.10), transparent 50%),
+    #020617;
+
+  color: #f1f5f9; /* slate-100 */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Better text rendering in some browsers */
+  text-rendering: optimizeLegibility;
 }
 
-/* links */
-a { color: #7dd3fc; }
-a:hover { color: #bae6fd; }
+/* Make images behave nicely by default */
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
 
-/* code */
+/* =========================
+   Links
+   (Keep neutral: don’t fight Tailwind colors)
+========================= */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Visible focus for keyboard users */
+:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.45); /* cyan */
+  outline-offset: 2px;
+}
+
+/* =========================
+   Code blocks / inline code
+========================= */
 code {
-  background: #0f172a;
-  color: #e2e8f0;
+  background: rgba(15, 23, 42, 0.85); /* slate-900-ish */
+  color: #e2e8f0; /* slate-200 */
   padding: 2px 6px;
   border-radius: 10px;
+  border: 1px solid rgba(30, 41, 59, 0.7); /* slate-800 */
 }
 
-/* inputs */
-input, select, textarea {
+/* =========================
+   Form elements (subtle base)
+   Don’t over-style; Tailwind should lead.
+========================= */
+input,
+select,
+textarea {
   width: 100%;
-  border-radius: 16px;
-  border: 1px solid #1e293b;
-  background: #0b1220;
+  border-radius: 14px;
+  border: 1px solid rgba(30, 41, 59, 0.9); /* slate-800 */
+  background: rgba(2, 6, 23, 0.6); /* slate-950 */
   color: #f1f5f9;
-  padding: 10px 14px;
+  padding: 10px 12px;
   outline: none;
 }
-input::placeholder, textarea::placeholder { color: #64748b; }
-input:focus, select:focus, textarea:focus {
-  box-shadow: 0 0 0 4px rgba(14,165,233,.25);
-  border-color: rgba(14,165,233,.45);
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b; /* slate-500 */
 }
 
-/* buttons */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.16);
+}
+
+/* =========================
+   Buttons
+   IMPORTANT: do NOT globally paint all buttons,
+   because it breaks Tailwind button variants.
+   Keep only accessibility/UX basics.
+========================= */
 button {
-  border-radius: 16px;
-  background: #38bdf8;
-  color: #020617;
-  padding: 10px 16px;
-  font-weight: 600;
-  box-shadow: 0 10px 30px rgba(0,0,0,.12);
-  transition: transform .08s ease, background .15s ease;
+  font: inherit;
 }
-button:hover { background: #7dd3fc; }
-button:active { transform: scale(.99); }
 
-button.secondary {
-  background: #1f2937;
-  color: #f1f5f9;
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
-button.secondary:hover { background: #334155; }
 
-/* reusable */
+/* =========================
+   Utility classes you can opt into
+   (use these only if you want, otherwise Tailwind)
+========================= */
 .card {
   border-radius: 20px;
-  border: 1px solid #1e293b;
-  background: rgba(15, 23, 42, .55);
-  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  border: 1px solid rgba(30, 41, 59, 0.9); /* slate-800 */
+  background: rgba(15, 23, 42, 0.55); /* slate-900 */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   border-radius: 999px;
-  border: 1px solid #334155;
-  background: #0f172a;
-  padding: 2px 10px;
+  border: 1px solid rgba(51, 65, 85, 0.9); /* slate-700 */
+  background: rgba(2, 6, 23, 0.45);
+  padding: 4px 10px;
   font-size: 12px;
   color: #e2e8f0;
 }
 
 .kpi {
   border-radius: 20px;
-  border: 1px solid #1e293b;
-  background: rgba(15, 23, 42, .55);
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  background: rgba(15, 23, 42, 0.55);
   padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+}
+
+/* Optional: button helpers (only if you use these classes) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 600;
+  transition: transform 0.08s ease, opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.99);
+}
+
+.btn-primary {
+  background: linear-gradient(to right, rgba(34, 211, 238, 1), rgba(37, 99, 235, 1));
+  color: #020617;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+}
+
+.btn-secondary {
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  background: rgba(2, 6, 23, 0.35);
+  color: #e2e8f0;
+}
+
+.btn-secondary:hover {
+  background: rgba(15, 23, 42, 0.4);
 }

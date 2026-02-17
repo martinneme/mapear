@@ -1,6 +1,13 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
-export type AuthUser = { id: string; email: string; globalRole: "ANALYST" | "SUBSCRIBER" };
+export type PlanTier = "INVITED" | "SUBSCRIBER" | "SUBSCRIBER_PLUS";
+
+export type AuthUser = {
+  id: string;
+  email: string;
+  globalRole: "ANALYST" | "SUBSCRIBER";
+  planTier?: PlanTier; // backend ya lo devuelve, lo dejamos opcional por compat
+};
 
 export function getToken() {
   if (typeof window === "undefined") return null;
@@ -58,4 +65,8 @@ export const api = {
 
   updateSubscriber: (tenantId: string, subscriberUserId: string, payload: any) =>
     apiFetch(`/tenants/${tenantId}/subscribers/${subscriberUserId}`, { method: "PUT", body: JSON.stringify(payload) }),
+
+  // NUEVO (lo vamos a usar después):
+  layers: () => apiFetch("/layers"),
+  content: (iso3: string, layerKey: string) => apiFetch(`/content?iso3=${encodeURIComponent(iso3)}&layer=${encodeURIComponent(layerKey)}`),
 };
